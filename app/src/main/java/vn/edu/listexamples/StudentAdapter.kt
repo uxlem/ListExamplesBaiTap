@@ -4,11 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 
-class StudentAdapter(val students: List<StudentModel>): BaseAdapter() {
+class StudentAdapter(val students: MutableList<StudentModel>): BaseAdapter() {
   override fun getCount() = students.size
 
   override fun getItem(p0: Int) = students[p0]
@@ -27,10 +28,10 @@ class StudentAdapter(val students: List<StudentModel>): BaseAdapter() {
     if (p1 == null) {
       itemView = LayoutInflater.from(p2?.context).inflate(R.layout.layout_student_item, p2, false)
       viewHolder = ViewHolder()
-      viewHolder.imageAvatar = itemView.findViewById<ImageView>(R.id.image_avatar)
+
       viewHolder.textHoten = itemView.findViewById<TextView>(R.id.text_hoten)
       viewHolder.textMssv = itemView.findViewById<TextView>(R.id.text_mssv)
-      viewHolder.checkSelected = itemView.findViewById<CheckBox>(R.id.check_selected)
+      viewHolder.button = itemView.findViewById<Button>(R.id.button)
       itemView.tag = viewHolder
     } else {
       itemView = p1
@@ -38,23 +39,23 @@ class StudentAdapter(val students: List<StudentModel>): BaseAdapter() {
     }
 
     val student = students[p0]
-    viewHolder.imageAvatar.setImageResource(student.avatarResId)
+
     viewHolder.textHoten.text = student.hoten
     viewHolder.textMssv.text = student.mssv
-    viewHolder.checkSelected.isChecked = student.selected
 
-    viewHolder.checkSelected.setOnClickListener {
-      student.selected = !student.selected
+    viewHolder.button.setOnClickListener({
+      students.removeAt(p0)
       notifyDataSetChanged()
-    }
+    })
+
 
     return itemView
   }
 
   class ViewHolder {
-    lateinit var imageAvatar: ImageView
+
     lateinit var textHoten: TextView
     lateinit var textMssv: TextView
-    lateinit var checkSelected: CheckBox
+    lateinit var button: Button
   }
 }
